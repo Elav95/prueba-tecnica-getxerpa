@@ -1,6 +1,6 @@
 import json
-from uuid import uuid4
 from requests import Response
+from rest_framework import status
 from rest_framework import viewsets
 from django.http import JsonResponse
 from rest_framework.decorators import action
@@ -52,7 +52,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
             return JsonResponse({'enriched_transactions': enriched_transactions})
 
         except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 def process_enrichment(transaction_data):
     try:
