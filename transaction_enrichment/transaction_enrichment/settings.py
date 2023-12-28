@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'transaction_enrichment',
     'enrichment',
     'rest_framework',
+    'django_extensions',
 
 ]
 
