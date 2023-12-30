@@ -1,11 +1,11 @@
+import re
 import json
 from requests import Response
-from rest_framework import status
 from rest_framework import viewsets
 from django.http import JsonResponse
 from rest_framework.decorators import action
 from django.views.decorators.csrf import csrf_exempt
-from .models import Category, Merchant, Keyword, Transaction, extract_keyword_from_description
+from .models import Category, Merchant, Keyword, Transaction, EnrichedTransaction
 from .serializers import CategorySerializer, MerchantSerializer, KeywordSerializer, TransactionSerializer
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -40,6 +40,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
             enriched_transactions = []
             for transaction_data in transactions:
                 transaction = Transaction(
+                    id=transaction_data.get('id', ''),
                     description=transaction_data.get('description', ''),
                     amount=transaction_data.get('amount', 0),
                     date=transaction_data.get('date', ''),
@@ -52,32 +53,25 @@ class TransactionViewSet(viewsets.ModelViewSet):
             return JsonResponse({'enriched_transactions': enriched_transactions})
 
         except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(f'error: {str(e)}')
 
 def process_enrichment(transaction_data):
     try:
         description = transaction_data.get('description', '')
-        keyword_name = extract_keyword_from_description(description)
-
+        keyword_names = extract_keyword_from_description(description)
         # Buscar el comercio basado en la información de la transacción y las keywords
-        merchant = find_merchant(description, keyword_name)
-
-        # Obtener o crear la categoría
-        category_name = transaction_data.get('category_name', '')
-        category_type = 'expense' if transaction_data.get('amount', 0) < 0 else 'income'
-        category, category_created = Category.objects.get_or_create(
-            name=category_name,
-            defaults={'type': category_type}
-        )
+        merchant, keyword = find_merchant(description, keyword_names)
+        # Obtener la categoría
+        category = merchant.category
 
         # Crear la transacción y asignar relaciones
-        transaction = Transaction.objects.create(
+        transaction = EnrichedTransaction.objects.create(
             description=description,
             amount=transaction_data.get('amount', 0),
             date=transaction_data.get('date'),
-            merchant=merchant,
-            category=category,
-            keyword=Keyword.objects.get_or_create(name=keyword_name)[0]
+            merchant=merchant.merchant_name,
+            category=category.name,
+            keyword=keyword.keyword
         )
 
         return {
@@ -87,31 +81,44 @@ def process_enrichment(transaction_data):
             'date': str(transaction.date),
             'category_name': category.name,
             'type': category.type,
-            'merchant_name': merchant.name if merchant else None,
-            'merchant_logo': merchant.logo if merchant else None,
-            'keyword': keyword_name,
-            'merchant_id': str(merchant.id) if merchant else None
+            'merchant_name': merchant.merchant_name if merchant else None,
+            'merchant_logo': merchant.merchant_logo if merchant else None,
+            'keyword': keyword.keyword
         }
 
     except Exception as e:
         return {'error': str(e)}
 
-def find_merchant(description, keyword_name):
-    merchant = None
-    if keyword_name:
-        for word in keyword_name:
-            keyword = Keyword.objects.get(keyword=word)
-            if keyword:
-                try:
-                    id = keyword.merchant
-                    merchant = Merchant.objects.get(id=id)
-                except Merchant.DoesNotExist:
-                    pass
+def find_merchant(description, keyword_names):
+    merchant = ''
+    keyword = ''
+    if keyword_names:
+        for word in keyword_names:
+            try:
+                keyword = Keyword.objects.get(keyword=word)
+                if keyword and keyword.merchant_id:
+                    merchant_id = keyword.merchant_id
+                    merchant = Merchant.objects.get(id=merchant_id)
+                    return merchant, keyword
+            except Keyword.DoesNotExist:
+                pass
+            except Merchant.DoesNotExist:
+                pass
     else:
         if not merchant and description:
             try:
-                merchant = Merchant.objects.get(name__iexact=description)
+                merchant = Merchant.objects.get(merchant_name__iexact=description)
+                if merchant:
+                    return merchant, keyword
             except Merchant.DoesNotExist:
                 pass
 
-    return merchant
+    return merchant, keyword
+
+def extract_keyword_from_description(description):
+    words = re.findall(r'\w+', description)
+    if words:
+        for i in range(len(words)):
+            words[i] = words[i].lower()
+        return words
+    return None

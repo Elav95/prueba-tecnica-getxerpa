@@ -5,17 +5,6 @@ def run():
     excel_file_path = 'data/data.xlsx'
 
     try:
-        # Transactions
-        df_transactions = pd.read_excel(excel_file_path, sheet_name='Transacciones')
-
-        for _, row in df_transactions.iterrows():
-            Transaction.objects.create(
-                id=row['id'],
-                description=row['description'],
-                amount=row["amount"] if pd.notna(row["amount"]) else None,
-                date=row["date"] if pd.notna(row["date"]) else None,
-            )
-
         # Categories
         df_categories = pd.read_excel(excel_file_path, sheet_name='Categorías')
         for _, row in df_categories.iterrows():
@@ -41,7 +30,7 @@ def run():
             Keyword.objects.create(
                 id=row['id'],
                 keyword=row['keyword'],
-                merchant_id=row['merchant_id'],
+                merchant_id=row['merchant_id'] if row['merchant_id'] else None,
             )
 
         print('Data imported successfully!')
