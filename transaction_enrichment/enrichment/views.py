@@ -63,27 +63,27 @@ def process_enrichment(transaction_data):
         merchant, keyword = find_merchant(description, keyword_names)
         # Obtener la categoría
         category = merchant.category
+        # Obtener la transacción
+        transaction = Transaction.objects.get(id=transaction_data['id'])
 
         # Crear la transacción y asignar relaciones
-        transaction = EnrichedTransaction.objects.create(
-            description=description,
-            amount=transaction_data.get('amount', 0),
-            date=transaction_data.get('date'),
-            merchant=merchant.merchant_name,
-            category=category.name,
-            keyword=keyword.keyword
+        enriched_transaction = EnrichedTransaction.objects.create(
+            transaction=transaction,
+            merchant=merchant,
+            category=category,
+            keyword=keyword
         )
 
         return {
-            'id': str(transaction.id),
+            'id': str(enriched_transaction.id),
             'description': transaction.description,
             'amount': transaction.amount,
             'date': str(transaction.date),
             'category_name': category.name,
-            'type': category.type,
-            'merchant_name': merchant.merchant_name if merchant else None,
-            'merchant_logo': merchant.merchant_logo if merchant else None,
-            'keyword': keyword.keyword
+            'type': category.type if category else 'income' if transaction.amount > 0 else 'expense',
+            'merchant_name': merchant.merchant_name if merchant else '',
+            'merchant_logo': merchant.merchant_logo if merchant else '',
+            'keyword': keyword.keyword if keyword else ''
         }
 
     except Exception as e:

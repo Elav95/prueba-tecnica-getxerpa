@@ -33,11 +33,9 @@ class Transaction(models.Model):
 
 class EnrichedTransaction(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    description = models.TextField()
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date = models.DateField()
-    merchant = models.CharField(max_length=255)
-    category = models.CharField(max_length=255)
-    keyword = models.CharField(max_length=255)
+    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, blank=True, null=True)
+    merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
+    keyword = models.ForeignKey(Keyword, on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
