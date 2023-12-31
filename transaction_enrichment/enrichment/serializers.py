@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Merchant, Keyword, Transaction
+from .models import Category, Merchant, Keyword, Transaction, EnrichedTransaction
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,4 +19,9 @@ class KeywordSerializer(serializers.ModelSerializer):
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
+        fields = '__all__'
+
+class EnrichedTransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EnrichedTransaction
         fields = '__all__'

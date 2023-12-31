@@ -33,7 +33,7 @@ class Transaction(models.Model):
 
 class EnrichedTransaction(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    transaction = models.ForeignKey(Transaction, on_delete=models.CASCADE, blank=True, null=True)
+    transaction = models.OneToOneField(Transaction, on_delete=models.CASCADE)
     merchant = models.ForeignKey(Merchant, on_delete=models.CASCADE, blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
     keyword = models.ForeignKey(Keyword, on_delete=models.CASCADE, blank=True, null=True)

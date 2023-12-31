@@ -19,16 +19,12 @@ Luego, activa el entorno virtual:
 venv\Scripts\activate
 ```
 
-
-Aquí está el código Markdown:
-
-markdown
-Copy code
 ## Configuración del Entorno Virtual
 
 Luego, activa el entorno virtual:
 
 **En Windows:**
+
 ```bash
 venv\Scripts\activate
 ```
@@ -64,6 +60,7 @@ python manage.py import_data
 ```
 
 ## Ejecutar el Servidor
+
 Inicia el servidor de desarrollo:
 
 ```bash
@@ -103,4 +100,4 @@ El cuerpo de la solicitud debe contener un JSON con la lista de transacciones a 
 - El proyecto utiliza un entorno virtual para gestionar las dependencias.
 Las migraciones de la base de datos deben realizarse antes de ejecutar el servidor.
 - Utiliza el script import_data para cargar datos iniciales.
-- Asegúrate de que el servidor esté en ejecución antes de realizar solicitudes al API.
+- Asegúrate de que el servidor esté en ejecución antes de realizar solicitudes a la API.
