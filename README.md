@@ -56,7 +56,7 @@ python manage.py migrate
 Utiliza el script de importación para cargar datos en la base de datos:
 
 ```bash
-python manage.py import_data
+python manage.py runscript import_data
 ```
 
 **Nota:** Al ejecutar el script import_data, se agregarán automáticamente las categorías, comercios y keywords del archivo de datos proporcionado.
