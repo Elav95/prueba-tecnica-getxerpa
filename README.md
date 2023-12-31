@@ -10,29 +10,17 @@ Es recomendable utilizar un entorno virtual para aislar las dependencias del pro
 python -m venv .env
 ```
 
-## Configuración del Entorno Virtual
-
 Luego, activa el entorno virtual:
 
 **En Windows:**
 ```bash
-venv\Scripts\activate
-```
-
-## Configuración del Entorno Virtual
-
-Luego, activa el entorno virtual:
-
-**En Windows:**
-
-```bash
-venv\Scripts\activate
+.env\Scripts\activate
 ```
 
 **En Unix o MacOS:**
 
 ```bash
-source venv/bin/activate
+source .env/bin/activate
 ```
 
 ## Instalación de Dependencias
