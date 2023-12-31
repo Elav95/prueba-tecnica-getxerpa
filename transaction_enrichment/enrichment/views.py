@@ -103,6 +103,8 @@ def process_enrichment(transaction):
 
 def find_merchant(description, keyword_names):
     # Find a merchant based on the information from the transaction and keywords
+    merchant = None
+    keyword = None
     if keyword_names:
         for word in keyword_names:
             try:
@@ -112,10 +114,8 @@ def find_merchant(description, keyword_names):
                     merchant = Merchant.objects.get(id=merchant_id)
                     return merchant, keyword
             except Keyword.DoesNotExist:
-                keyword = None
                 pass
             except Merchant.DoesNotExist:
-                merchant = None
                 pass
 
     if not merchant and description:
