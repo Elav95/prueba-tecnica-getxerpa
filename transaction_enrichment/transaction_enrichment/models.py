@@ -11,7 +11,7 @@ class Category(models.Model):
 class Merchant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     merchant_name = models.CharField(max_length=255)
-    merchant_logo = models.URLField()
+    merchant_logo = models.URLField(blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
