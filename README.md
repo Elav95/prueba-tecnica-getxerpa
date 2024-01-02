@@ -49,6 +49,16 @@ python manage.py runscript import_data
 
 **Nota:** Al ejecutar el script import_data, se agregarán automáticamente las categorías, comercios y keywords del archivo de datos proporcionado.
 
+## Pruebas
+
+Se proporciona un conjunto de pruebas para verificar el correcto funcionamiento de los componentes del proyecto. Para ejecutar las pruebas, utiliza el siguiente comando:
+
+```bash
+python manage.py test
+```
+
+Estas pruebas cubren aspectos como la creación y recuperación de categorías, comercios, palabras clave, transacciones y el enriquecimiento de transacciones. Asegúrate de que el servidor esté en ejecución antes de ejecutar las pruebas.
+
 ## Ejecutar el Servidor
 
 Inicia el servidor de desarrollo:
