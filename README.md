@@ -272,10 +272,9 @@ El cuerpo de la solicitud debe contener un JSON con la lista de transacciones a 
 {
   "transactions": [
     {
-      "id": "uuid4",
-      "description": "PYU *UberEats",
-      "amount": -300.00,
-      "date": "2023-12-01"
+      "description": "PETROBRAS 9 NTE/7 ORNTE",
+      "amount": "-230.00",
+      "date": "2023-11-04"
     },
     // ... otras transacciones
   ]
