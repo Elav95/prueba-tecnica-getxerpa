@@ -310,7 +310,7 @@ En situaciones en las que la transacción aún no está enriquecida, se realiza 
 
 Es importante destacar que no es necesario enviar una transacción con un ID para que sea enriquecida; el sistema manejará automáticamente la asignación y verificación.
 
-**Consideraciones:**
+## Consideraciones:
 
 - El proyecto utiliza un entorno virtual para gestionar las dependencias.
 Las migraciones de la base de datos deben realizarse antes de ejecutar el servidor.
