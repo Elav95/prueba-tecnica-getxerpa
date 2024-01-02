@@ -313,6 +313,7 @@ Es importante destacar que no es necesario enviar una transacción con un ID par
 ## Consideraciones:
 
 - El proyecto utiliza un entorno virtual para gestionar las dependencias.
-Las migraciones de la base de datos deben realizarse antes de ejecutar el servidor.
-- Utiliza el script import_data para cargar los datos iniciales.
+- Las migraciones de la base de datos deben realizarse antes de ejecutar el servidor.
+- Utiliza el script `import_data` para cargar los datos iniciales.
+- Ejecuta las pruebas con `python manage.py test` para garantizar la integridad y funcionamiento del sistema.
 - Asegúrate de que el servidor esté en ejecución antes de realizar solicitudes a la API.
